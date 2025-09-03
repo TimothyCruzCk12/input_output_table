@@ -11,6 +11,10 @@ const InputOutputTable = () => {
         const [currentStep, setCurrentStep] = useState(0);
 
         // Functions
+        const generateTable = () => {
+
+        }
+
         const handleButtonClick = (input) => {
 
         };
