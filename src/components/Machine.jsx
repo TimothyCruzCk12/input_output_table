@@ -1,0 +1,71 @@
+const Machine = ({rule, step, lightColor}) => {
+    return(
+        <div className='flex flex-col h-[100%] flex-grow items-center z-2'>
+                <div className='mb-2'>
+                        Rule
+                </div>
+                {/* Top Decorations */}
+                <div className='relative w-[60%] flex items-center z-1'>
+                    {/* Gear */}
+                    <div className="absolute translate-y-1 w-8 h-8 flex items-center justify-center">
+                        {/* Gear teeth */}
+                        <div className="absolute inset-0">
+                            {/* Top tooth */}
+                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-gray-500" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Top-right tooth */}
+                            <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-gray-500 transform rotate-45" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Right tooth */}
+                            <div className="absolute top-1/2 right-0 transform -translate-y-1/2 w-1.5 h-1.5 bg-gray-500 rotate-90" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Bottom-right tooth */}
+                            <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-gray-500 transform rotate-[135deg]" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Bottom tooth */}
+                            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-gray-500 rotate-180" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Bottom-left tooth */}
+                            <div className="absolute bottom-1 left-1 w-1.5 h-1.5 bg-gray-500 transform rotate-[225deg]" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Left tooth */}
+                            <div className="absolute top-1/2 left-0 transform -translate-y-1/2 w-1.5 h-1.5 bg-gray-500 rotate-[270deg]" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                            {/* Top-left tooth */}
+                            <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-gray-500 transform rotate-[315deg]" 
+                                 style={{clipPath: 'polygon(20% 100%, 80% 100%, 100% 0%, 0% 0%)'}}></div>
+                        </div>
+                        {/* Main gear body */}
+                        <div className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center">
+                            <div className="w-3 h-3 bg-white rounded-full"></div>
+                        </div>
+                    </div>
+                    {/* Lights */}
+                    <div className='flex gap-2 ml-auto'>
+                        <div className='w-[10px] h-[10px] border border-black border-1 border-b-0 rounded-t-full'/>
+                        <div className='w-[10px] h-[10px] border border-black border-1 border-b-0 rounded-t-full'/>
+                    </div>
+                </div>
+                {/* Top Slab */}
+                <div className='relative w-[70%] h-[10px] bg-gray-800 rounded-bl-lg rounded-br-lg z-2'/>
+                    {/* Middle of Machine */}
+                    <div className='w-[80%] h-[100%] flex items-center justify-center z-2'>
+                        {/* Left Funnel */}
+                        <div className='bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center' style={{clipPath: 'polygon(0% 0%, 100% 25%, 100% 75%, 0% 100%)'}} />
+                        {/* Gray Body */}
+                        <div className='flex-grow bg-gray-500 h-[100%] flex items-center justify-center z-0'>
+                                {/* Rule */}
+                                <div className='text-center text-sm bg-white py-2 px-1 flex items-center justify-center rounded-md z-10'>{rule}</div>
+                                {/* Indent */}
+                                <div className='absolute bg-gray-600 h-[30%] w-[10px] rounded-lg z-1'/>
+                        </div>
+                        {/* Right Funnel */}
+                        <div className='bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center' style={{clipPath: 'polygon(0% 25%, 100% 0%, 100% 100%, 0% 75%)'}} />
+                    </div>
+                {/* Bottom Slab */}
+                <div className='w-[70%] h-[10px] bg-gray-800 rounded-tl-lg rounded-tr-lg'/>
+        </div>
+    )
+}
+
+export default Machine;
