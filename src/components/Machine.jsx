@@ -1,4 +1,4 @@
-const Machine = ({rule, step, lightColor}) => {
+const Machine = ({rule, step, lightColor, lightType}) => {
     return(
         <div className='flex flex-col h-[100%] flex-grow items-center z-2'>
                 <div className='mb-2'>
@@ -42,12 +42,18 @@ const Machine = ({rule, step, lightColor}) => {
                     </div>
                     {/* Lights */}
                     <div className='flex gap-2 ml-auto'>
-                        <div className='w-[10px] h-[10px] border border-black border-1 border-b-0 rounded-t-full'/>
-                        <div className='w-[10px] h-[10px] border border-black border-1 border-b-0 rounded-t-full'/>
+                        {/* Wrong Answer Light */}
+                        <div className={`w-[10px] h-[10px] border border-gray-500 border-1 border-b-0 rounded-t-full ${
+                            lightType === 'wrong' ? 'bg-red-500 shadow-lg shadow-red-500/50' : ''
+                        }`}/>
+                        {/* Correct Answer Light */}
+                        <div className={`w-[10px] h-[10px] border border-gray-500 border-1 border-b-0 rounded-t-full ${
+                            lightType === 'correct' ? 'bg-green-500 shadow-lg shadow-green-500/50' : ''
+                        }`}/>
                     </div>
                 </div>
                 {/* Top Slab */}
-                <div className='relative w-[70%] h-[10px] bg-gray-800 rounded-bl-lg rounded-br-lg z-2'/>
+                <div className='relative w-[70%] h-[10px] bg-gray-700 rounded-bl-lg rounded-br-lg z-2'/>
                     {/* Middle of Machine */}
                     <div className='w-[80%] h-[100%] flex items-center justify-center z-2'>
                         {/* Left Funnel */}
@@ -55,7 +61,7 @@ const Machine = ({rule, step, lightColor}) => {
                         {/* Gray Body */}
                         <div className='flex-grow bg-gray-500 h-[100%] flex items-center justify-center z-0'>
                                 {/* Rule */}
-                                <div className='text-center text-sm bg-white py-2 px-1 flex items-center justify-center rounded-md z-10'>{rule}</div>
+                                <div className='text-center font-bold text-sm bg-white py-2 px-1 flex items-center justify-center border border-yellow-600 rounded-md z-10'>{rule}</div>
                                 {/* Indent */}
                                 <div className='absolute bg-gray-600 h-[30%] w-[10px] rounded-lg z-1'/>
                         </div>
@@ -63,7 +69,7 @@ const Machine = ({rule, step, lightColor}) => {
                         <div className='bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center' style={{clipPath: 'polygon(0% 25%, 100% 0%, 100% 100%, 0% 75%)'}} />
                     </div>
                 {/* Bottom Slab */}
-                <div className='w-[70%] h-[10px] bg-gray-800 rounded-tl-lg rounded-tr-lg'/>
+                <div className='w-[70%] h-[10px] bg-gray-700 rounded-tl-lg rounded-tr-lg'/>
         </div>
     )
 }
