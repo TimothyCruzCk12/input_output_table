@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { Container } from './ui/reused-ui/Container.jsx'
 import Machine from './Machine.jsx'
+import './Machine.css'
 import './ui/reused-animations/fade.css'
 
 const InputOutputTable = () => {
@@ -14,6 +15,9 @@ const InputOutputTable = () => {
         const [choices, setChoices] = useState([1, 2, 3]);
         const [revealedOutputs, setRevealedOutputs] = useState([false, false, false]);
         const [lightType, setLightType] = useState(null);
+        const [shakeButton, setShakeButton] = useState(null);
+        const [buttonFadeState, setButtonFadeState] = useState('visible'); // 'visible', 'fade-out', 'fade-in'
+        const [isProcessingCorrectAnswer, setIsProcessingCorrectAnswer] = useState(false);
 
         // Functions
         const generateTable = () => {
@@ -58,9 +62,12 @@ const InputOutputTable = () => {
                 const newOutputs = selectedInputs.map(input => multiplier * input + addSubtract);
                 setOutputs(newOutputs);
                 
-                // Reset revealed outputs and lights
+                // Reset revealed outputs, lights, shake button, fade state, and processing flag
                 setRevealedOutputs([false, false, false]);
                 setLightType(null);
+                setShakeButton(null);
+                setButtonFadeState('visible');
+                setIsProcessingCorrectAnswer(false);
                 
                 // Generate choices for the first step
                 setTimeout(() => generateChoices(), 0);
@@ -101,46 +108,74 @@ const InputOutputTable = () => {
         }, [inputs, currentStep, outputs, rule]);
 
         const handleButtonClick = (choiceIndex) => {
+                // Prevent rapid clicking on correct answers
+                if (isProcessingCorrectAnswer) {
+                        return;
+                }
+                
                 const clickedChoice = choices[choiceIndex];
                 const correctOutput = outputs[currentStep];
                 
                 // Check if the clicked choice is correct
                 if (clickedChoice === correctOutput) {
+                        // Mark as processing to prevent rapid clicks
+                        setIsProcessingCorrectAnswer(true);
                         // Flash green light for correct answer
                         setLightType('correct');
                         setTimeout(() => setLightType(null), 800);
                         
-                        // Reveal the current output
-                        const newRevealedOutputs = [...revealedOutputs];
-                        newRevealedOutputs[currentStep] = true;
-                        setRevealedOutputs(newRevealedOutputs);
+                        // Start fade-out animation after a short delay
+                        setTimeout(() => {
+                                setButtonFadeState('fade-out');
+                        }, 500);
                         
-                        // Check if this was the final step
-                        if (currentStep === inputs.length - 1) {
-                                // All inputs solved - trigger confetti and reset
-                                confetti({
-                                        particleCount: 100,
-                                        spread: 70,
-                                        origin: { y: 0.5 }
-                                });
+                        // After delay + fade-out completes (0.3s + 0.5s), reveal output and handle next step
+                        setTimeout(() => {
+                                // Reveal the current output
+                                const newRevealedOutputs = [...revealedOutputs];
+                                newRevealedOutputs[currentStep] = true;
+                                setRevealedOutputs(newRevealedOutputs);
                                 
-                                // Wait 3 seconds then reset
-                                setTimeout(() => {
-                                        setCurrentStep(0);
-                                        setRevealedOutputs([false, false, false]);
-                                        setLightType(null);
-                                        generateTable();
-                                }, 3000);
-                        } else {
-                                // Move to next step after a brief delay
-                                setTimeout(() => {
+                                // Check if this was the final step
+                                if (currentStep === inputs.length - 1) {
+                                        // All inputs solved - trigger confetti and reset
+                                        confetti({
+                                                particleCount: 100,
+                                                spread: 70,
+                                                origin: { y: 0.5 }
+                                        });
+                                        
+                                        // Wait 3 seconds then reset
+                                        setTimeout(() => {
+                                                setCurrentStep(0);
+                                                setRevealedOutputs([false, false, false]);
+                                                setLightType(null);
+                                                setIsProcessingCorrectAnswer(false);
+                                                generateTable();
+                                        }, 3000);
+                                } else {
+                                        // Move to next step and generate new choices
                                         setCurrentStep(currentStep + 1);
-                                }, 500);
-                        }
+                                        
+                                        // After choices are generated, start fade-in
+                                        setTimeout(() => {
+                                                setButtonFadeState('fade-in');
+                                                // Return to visible after fade-in completes and allow new clicks
+                                                setTimeout(() => {
+                                                        setButtonFadeState('visible');
+                                                        setIsProcessingCorrectAnswer(false);
+                                                }, 300);
+                                        }, 50);
+                                }
+                        }, 800); // Wait for delay + fade-out to complete
                 } else {
                         // Flash red light for wrong answer
                         setLightType('wrong');
                         setTimeout(() => setLightType(null), 800);
+                        
+                        // Shake the wrong button
+                        setShakeButton(choiceIndex);
+                        setTimeout(() => setShakeButton(null), 500);
                 }
         };
 
@@ -206,15 +241,30 @@ const InputOutputTable = () => {
                 {/* Buttons */}
                 <div className='w-[100%] pt-3 pb-4 flex justify-center items-center gap-3'>
                         <button 
-                                className='count-by-button w-[28%] h-[80px] bg-gray-200 border border-gray-500 border-2 rounded-lg text-3xl font-extrabold text-gray-700 flex justify-center items-center' 
+                                className={`count-by-button w-[28%] h-[80px] bg-gray-200 border border-gray-500 border-2 rounded-lg text-3xl font-extrabold text-gray-700 flex justify-center items-center ${
+                                        shakeButton === 0 ? 'button-shake' : ''
+                                } ${
+                                        buttonFadeState === 'fade-out' ? 'fade-out-up-animation' : 
+                                        buttonFadeState === 'fade-in' ? 'fade-in-up-animation' : ''
+                                }`}
                                 onClick={() => handleButtonClick(0)}
                         >{choices[0]}</button>
                         <button 
-                                className='count-by-button w-[28%] h-[80px] bg-gray-200 border border-gray-500 border-2 rounded-lg text-3xl font-extrabold text-gray-700 flex justify-center items-center' 
+                                className={`count-by-button w-[28%] h-[80px] bg-gray-200 border border-gray-500 border-2 rounded-lg text-3xl font-extrabold text-gray-700 flex justify-center items-center ${
+                                        shakeButton === 1 ? 'button-shake' : ''
+                                } ${
+                                        buttonFadeState === 'fade-out' ? 'fade-out-up-animation' : 
+                                        buttonFadeState === 'fade-in' ? 'fade-in-up-animation' : ''
+                                }`}
                                 onClick={() => handleButtonClick(1)}
                         >{choices[1]}</button>
                         <button 
-                                className='count-by-button w-[28%] h-[80px] bg-gray-200 border border-gray-500 border-2 rounded-lg text-3xl font-extrabold text-gray-700 flex justify-center items-center' 
+                                className={`count-by-button w-[28%] h-[80px] bg-gray-200 border border-gray-500 border-2 rounded-lg text-3xl font-extrabold text-gray-700 flex justify-center items-center ${
+                                        shakeButton === 2 ? 'button-shake' : ''
+                                } ${
+                                        buttonFadeState === 'fade-out' ? 'fade-out-up-animation' : 
+                                        buttonFadeState === 'fade-in' ? 'fade-in-up-animation' : ''
+                                }`}
                                 onClick={() => handleButtonClick(2)}
                         >{choices[2]}</button>
                 </div>
