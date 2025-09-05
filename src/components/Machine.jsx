@@ -1,4 +1,9 @@
+import './Machine.css'
+
 const Machine = ({rule, step, lightColor, lightType}) => {
+    // Determine CSS class based on step
+    const stepClass = step === 0 ? 'stepOne' : step === 1 ? 'stepTwo' : 'stepThree';
+    
     return(
         <div className='flex flex-col h-[100%] flex-grow items-center z-2'>
                 <div className='mb-2'>
@@ -7,7 +12,7 @@ const Machine = ({rule, step, lightColor, lightType}) => {
                 {/* Top Decorations */}
                 <div className='relative w-[60%] flex items-center z-1'>
                     {/* Gear */}
-                    <div className="absolute translate-y-1 w-8 h-8 flex items-center justify-center">
+                    <div className={`absolute translate-y-[5px] w-8 h-8 flex items-center justify-center gear-spin`} key={step}>
                         {/* Gear teeth */}
                         <div className="absolute inset-0">
                             {/* Top tooth */}
@@ -57,16 +62,16 @@ const Machine = ({rule, step, lightColor, lightType}) => {
                     {/* Middle of Machine */}
                     <div className='w-[80%] h-[100%] flex items-center justify-center z-2'>
                         {/* Left Funnel */}
-                        <div className='bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center' style={{clipPath: 'polygon(0% 0%, 100% 25%, 100% 75%, 0% 100%)'}} />
+                        <div className={`bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center ${stepClass}`} style={{clipPath: 'polygon(0% 0%, 100% 25%, 100% 75%, 0% 100%)'}} />
                         {/* Gray Body */}
                         <div className='flex-grow bg-gray-500 h-[100%] flex items-center justify-center z-0'>
                                 {/* Rule */}
-                                <div className='text-center font-bold text-sm bg-white py-2 px-1 flex items-center justify-center border border-yellow-600 rounded-md z-10'>{rule}</div>
+                                <div className={`text-center font-bold text-sm bg-white py-2 px-1 flex items-center justify-center border border-yellow-600 rounded-md z-10 ${stepClass}`}>{rule}</div>
                                 {/* Indent */}
                                 <div className='absolute bg-gray-600 h-[30%] w-[10px] rounded-lg z-1'/>
                         </div>
                         {/* Right Funnel */}
-                        <div className='bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center' style={{clipPath: 'polygon(0% 25%, 100% 0%, 100% 100%, 0% 75%)'}} />
+                        <div className={`bg-yellow-500 h-[50px] w-[20px] flex items-center justify-center ${stepClass}`} style={{clipPath: 'polygon(0% 25%, 100% 0%, 100% 100%, 0% 75%)'}} />
                     </div>
                 {/* Bottom Slab */}
                 <div className='w-[70%] h-[10px] bg-gray-700 rounded-tl-lg rounded-tr-lg'/>

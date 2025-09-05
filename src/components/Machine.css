@@ -1,0 +1,25 @@
+.stepOne {
+    transform: translateY(-52px);
+    transition: transform 0.5s ease-in-out;
+}
+.stepTwo {
+    transform: translateY(0);
+    transition: transform 0.5s ease-in-out;
+}
+.stepThree {
+    transform: translateY(54px);
+    transition: transform 0.5s ease-in-out;
+}
+
+.gear-spin {
+    animation: spin 0.5s ease-in-out;
+}
+
+@keyframes spin {
+    from {
+        transform: translateY(5px) rotate(0deg);
+    }
+    to {
+        transform: translateY(5px) rotate(360deg);
+    }
+}
